@@ -52,23 +52,26 @@ public class ArtActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        String info = intent.getStringExtra("name");
+        String info = intent.getStringExtra("info");
 
-        if (info.equals("new")){
+        if (info.matches("new")){
             //new art
             binding.nameText.setText("");
             binding.artistText.setText("");
             binding.yearText.setText("");
             binding.button.setVisibility(View.VISIBLE);
-            binding.imageView.setImageResource(R.drawable.indir);
+
+            Bitmap selectImage = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.indir);
+            binding.imageView.setImageBitmap(selectImage);
         }
         else {
             //old art
-            int artID = intent.getIntExtra("artID",0);
+            int artID = intent.getIntExtra("artID",1);
             binding.button.setVisibility(View.INVISIBLE);
 
+
             try {
-                Cursor cursor = database.rawQuery("SELECT * FROM arts WHERE id = ?",new String[]{String.valueOf(artID)});
+                Cursor cursor = database.rawQuery("SELECT * FROM arts WHERE id = ?",new String[] {String.valueOf(artID)});
                 int artNameIx = cursor.getColumnIndex("artname");
                 int painterNameIx = cursor.getColumnIndex("painterName");
                 int yearIx = cursor.getColumnIndex("year");
